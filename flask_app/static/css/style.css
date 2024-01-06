@@ -1,0 +1,68 @@
+* {
+  font-family: 'DIN';
+  font-weight: normal;
+  box-sizing: border-box;
+}
+
+/* Estilos de tipo */
+
+body {
+  background-image: url(img/fondo.png);
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+button{
+  color: black;
+  background-color: white;
+  padding: .5em; 
+  border: 0; 
+}
+
+/* Estilos de clase */
+
+.main-container{
+  color: white;
+  text-align: center;
+  position: fixed;
+  top: 46%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  padding-left: 1.25em;
+  padding-right: 1.25em;
+  padding-top: 0.7em;
+  padding-bottom: 0.7em;
+  background-color: #004176;
+  width: 52vw;
+  height: 80vh;
+}
+
+.btnb{
+  color: black;
+  background-color: white;
+  padding: .5em; 
+  border: 0; 
+  text-align: center;
+  text-decoration: none;
+  width: 10vw;
+  height: 6vh;
+  border-radius: .5em;
+}
+
+/* Fuentes */
+
+@font-face {
+  font-family: 'DIN';
+  src: url('fonts/din-regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'DIN';
+  src: url('fonts/din-bold.ttf') format('truetype');
+  font-style: bold;
+  font-weight: bold;
+}

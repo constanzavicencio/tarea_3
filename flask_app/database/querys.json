@@ -1,0 +1,33 @@
+{
+    "insertar_artesano" : "INSERT INTO artesano (comuna_id, descripcion_artesania, nombre, email, celular) VALUES (%s,%s,%s,%s,%s);",
+    "listado_artesanos" : "SELECT id, comuna_id, descripcion_artesania, nombre, email, celular FROM artesano ORDER BY id DESC;",
+    "primeros_5_artesanos" : "SELECT id, comuna_id, descripcion_artesania, nombre, email, celular FROM artesano ORDER BY id DESC LIMIT 0, 5;",
+    "siguientes_5_artesanos" : "SELECT id, comuna_id, descripcion_artesania, nombre, email, celular FROM artesano ORDER BY id DESC LIMIT 5, 5;",
+    "siguientes_5_artesanos_comuna" : "SELECT artesano.id, comuna.nombre, descripcion_artesania, artesano.nombre, email, celular FROM artesano, comuna WHERE artesano.comuna_id=comuna.id ORDER BY id DESC LIMIT 5, 5;",
+
+    "insertar_artesano_tipo" : "INSERT INTO artesano_tipo (artesano_id, tipo_artesania_id) VALUES (%s,%s);",
+    "obtener_tipo_artesania" : "SELECT TA.nombre FROM tipo_artesania TA, artesano_tipo AT WHERE AT.tipo_artesania_id=TA.id AND AT.artesano_id=%s;",
+
+    "insertar_foto" : "INSERT INTO foto (ruta_archivo, nombre_archivo, artesano_id) VALUES (%s,%s,%s);",
+    "obtener_fotos" : "SELECT ruta_archivo, nombre_archivo FROM foto WHERE artesano_id=%s;",
+
+    "obtener_ultimo_id" : "SELECT LAST_INSERT_ID();",
+
+    "get_list_artesanos": "SELECT * FROM artesano ORDER BY id DESC LIMIT %s OFFSET %s",
+
+    "get_artesanias_de_artesano": "SELECT tipo_artesania_id FROM artesano_tipo WHERE artesano_id=%s;",
+    "get_artesania_byindex": "SELECT nombre FROM tipo_artesania WHERE id=%s;",
+    "get_fotos_artesano": "SELECT ruta_archivo, nombre_archivo FROM foto WHERE artesano_id=%s;",
+    "get_artesano_id_by_name" : "SELECT id FROM artesano WHERE nombre=%s;",
+
+    "get_all_artesano": "SELECT * FROM artesano WHERE nombre=%s",
+    "get_comuna_by_id": "SELECT nombre FROM comuna WHERE id=%s;",
+
+    "get_region_by_id": "SELECT region_id FROM comuna WHERE id=%s;",
+    "get_region_byregid": "SELECT nombre FROM region WHERE id=%s;",
+
+    "get_region_id_by_name" : "SELECT id FROM region WHERE nombre=%s;",
+    "get_comuna_id_by_region_id" : "SELECT id FROM comuna WHERE nombre=%s and region_id=%s;",
+
+    "get_comuna_id_by_region_and_comuna" : "SELECT CO.id FROM comuna CO, region RE WHERE CO.nombre=%s AND CO.region_id=RE.id;"
+}

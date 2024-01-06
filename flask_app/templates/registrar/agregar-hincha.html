@@ -1,0 +1,78 @@
+{% extends '/base.html' %}
+
+{% block title %} Registro hinchas {% endblock %}
+
+{% block css %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style-registro.css')}}" />
+{% endblock %}
+
+{% block content %}
+<div class="main-container">
+  <div>
+    <h2>Registro hinchas</h2>
+    <p>A continuación, rellene el formulario con sus datos.</p>
+  </div>
+
+  <div id="val-box" hidden>
+      <p id="val-msg"></p>
+      <p id="val-list"></p>
+  </div>
+
+  
+  <form id="formulario-hincha" method="post" enctype="multipart/form-data">
+  <fieldset>
+      <label for="deportes">Deportes</label><br>
+      <select id="deportes" multiple required></select><br>
+
+      <label for="regiones">Región</label><br>
+      <select id="regiones"></select><br>
+
+      <label for="comunas">Comuna</label><br>
+      <select id="comunas"></select><br>
+
+      <label for="transporte">Modo de transporte</label><br>
+      <select id="transporte" required>
+          <option value="">Seleccione un transporte</option>
+          <option value="particular">Particular</option>
+          <option value="locomocion_publica">Locomoción pública</option>
+      </select><br>
+  </fieldset>
+
+  <fieldset>
+      <label for="nombre">Nombre</label><br>
+      <input type="text" id="nombre" minlength="3" maxlength="80" required><br>
+
+      <label for="email">Email de contacto</label><br>
+      <input type="email" id="email" maxlength="30" required><br>
+
+      <label for="numero">Número celular de contacto</label><br>
+      <input type="text" id="numero" minlength="15" maxlength="15"><br>
+
+      <label for="comentarios">Comentarios adicionales</label><br>
+      <input type="text" id="comentarios" maxlength="80"><br><br>
+  </fieldset>
+
+      <br><input id="submit-btn" type="button" value="Enviar">
+</form>
+
+<div class="popup" id="confirmation-box">
+  <p>¿Confirma el registro de este hincha?</p>
+  <input id="confirmation-btn" type="button" value="Sí, confirmo.">
+  <input id="cancel-btn" type="button" value="No, cancelar.">
+</div>
+
+<div id="sent-box" hidden>
+  <p>Hemos recibido el registro de Hincha. Muchas gracias.</p>
+  <p><a class="index-btn" href="{{ url_for('index') }}">Volver al Inicio</a></p>
+</div>
+
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="static/js/gestor-deportes/gestor-deportes.js"></script>
+<script src="static/js/gestor-comunas/gestor-regiones-comunas.js"></script>
+<script src="static/js/validaciones/validacion-hincha.js"></script>
+{% endblock %}

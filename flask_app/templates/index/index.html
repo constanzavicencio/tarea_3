@@ -1,0 +1,24 @@
+{% extends '/base.html' %}
+
+{% block title %} Índice {% endblock %}
+
+{% block css %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style-index.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="button-container">
+    <a class="index-btn" href="{{ url_for('registrar_hincha') }}">Registrar hincha</a>
+
+    <a class="index-btn" href="{{ url_for('registrar_artesano') }}">Registrar Artesano</a> 
+    
+    <a class="index-btn" href="{{ url_for('listado_hinchas') }}">Listado Hinchas</a>
+
+    <a class="index-btn" href="{{ url_for('listado_artesanos', page = 0) }}">Listado artesanos</a>
+</div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+

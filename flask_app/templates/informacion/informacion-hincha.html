@@ -1,0 +1,65 @@
+{% extends '/base.html' %}
+
+{% block title %} Información Hincha {% endblock %}
+
+{% block css %}
+{{ super() }}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{{ url_for('static', filename='css/style-visualizacion.css')}}"
+/>
+{% endblock %}
+
+{% block content %}
+<body>
+    <div class="main-container">
+        <div>
+            <h1>Información del Hincha</h1>
+        </div>
+        <div>
+            {% if data %}
+                {% for hincha in data%}
+                <div class="hincha-container">
+                    <tr>
+                    <strong>Nombre: </strong>
+                        <span>{{hincha.nombre}}</span><br><br>
+                    
+                    <strong>Deporte/s que le interesa apoyar: </strong>
+                    {% for deporte in hincha.deportes%}
+                        <li>{{deporte}}</li>
+                    {% endfor%}
+                    
+                    <br><strong>Región: </strong>
+                        <span>{{hincha.region}}</span><br><br>
+                    
+                    <strong>Comuna: </strong>
+                        <span>{{hincha.comuna}}</span><br><br>
+                    
+                    <strong>Modo de Transporte: </strong>
+                        <span>{{hincha.modo_transporte}}<span><br><br>
+                    
+                    <strong>Email de contacto: </strong>
+                        <span>{{hincha.email}}</span><br><br>
+                    
+                    <strong>Número de contacto: </strong>
+                        <span>{{hincha.numero}}</span><br><br>
+                    
+                    <strong>Comentarios adicionales: </strong>
+                       <span>{{hincha.comentario}}</span><br><br>
+                    
+                    </tr>
+                </div>
+                {% endfor%}
+            {% endif %}
+        </div>
+        <div>
+            <button onclick="location.href='/listado-hinchas'">Volver al listado</button>
+        </div>
+    </div>
+</body>
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}

@@ -1,0 +1,66 @@
+/* Estilos de tipo */
+
+button{
+  width: 5vw;
+  height: 5vh;
+}
+
+tr {
+  height: --;
+}
+
+/* Estilos de clase */
+
+.tabla {
+  height: 95%;
+}
+
+.volver-btn {
+  width: 8vw;
+  position: fixed;
+  top: 93%;
+  left: 42%;
+}
+
+/* Estilos de clase (imágenes) */
+
+.img{
+    position:relative;
+    width:40px;
+    height:40px;
+}
+
+.img:hover{
+  color: #424242; 
+  -webkit-transition: all .3s ease-in;
+  -moz-transition: all .3s ease-in;
+  -ms-transition: all .3s ease-in;
+  -o-transition: all .3s ease-in;
+  transition: all .3s ease-in;
+  opacity: 1;
+  transform: scale(2);
+  -ms-transform: scale(2); /* IE 9 */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+}
+
+/* Estilos de id */
+
+#tabla-listado {
+  font-size: 10pt;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1.5em;
+  width: 95vw;
+}
+
+#nombre-btn {
+  color: black; 
+  display: inline-block;
+  background-color: white; 
+  padding: .5em;
+  text-align: center;
+  text-decoration: none;
+  width: 5vw;
+  height: 3vh;
+  border-radius: .5em;
+}

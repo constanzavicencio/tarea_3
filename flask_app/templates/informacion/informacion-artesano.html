@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %} Informacion Artesanos {% endblock %}
+
+{% block css %}
+{{ super() }}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="/static/css/style-visualizacion.css">
+{% endblock %}
+
+{% block content %}
+
+<h1>Información Artesano</h1>
+
+<div id="informacion">
+    {% if data %}
+        {% for artesano in data%}
+            <strong>Nombre: </strong><a>{{artesano.nombre}}</a><br>
+            <strong>Artesanías: </strong><a>{{artesano.tipo_artesania}}</a><br>
+            <strong>Descripción Artesanía: </strong><a>{{artesano.descripcion}}</a><br>
+            <strong>Fotos Artesanías</strong><br>
+            <div class="fotos">
+                <img src= "{{artesano.fotos1}}" class="img" id="img1"/>
+                
+                {% if artesano.fotos2 %}
+                <img src= "{{artesano.fotos2}}" class="img" id="img2"/>
+                {% endif %}
+
+                {% if artesano.fotos3 %}
+                <img src= "{{artesano.fotos3}}" class="img" id="img3"/>
+                {% endif %}
+            </div>
+            <strong>Región: </strong><a>{{artesano.region}}</a><br>
+            <strong>Comuna: </strong><a>{{artesano.comuna}}</a><br>
+            <strong>Email de contacto: </strong><a>{{artesano.email}}</a><br>
+            <strong>Teléfono de contacto: </strong><a>{{artesano.numero}}</a><br>
+        {% endfor%}
+    {% endif %}
+</div><br>
+
+<a id="btn-volver" href="{{ url_for('listado_artesanos', page=0) }}">Volver al listado de artesanos</a>
+
+
+{% endblock %}
+
+{% block javascript %}
+<!-- No utiliza javascript -->
+{% endblock %}

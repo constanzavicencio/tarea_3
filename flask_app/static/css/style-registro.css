@@ -1,0 +1,70 @@
+/* Estilos de tipo */
+
+textarea {
+  color: black;
+  background-color: white;
+  padding: .5em;
+  width: 15vw;
+  height: 6vh;
+}
+
+input {
+  color: black;
+  width: 15vw;
+  line-height: 1.7em;
+}
+
+input[type="button"] {
+  background-color: white;
+  padding: .5em;
+}
+
+select {
+  width: 15vw;
+  height: 1.675vw;
+}
+
+label {
+  font-size: 10pt;
+  line-height: 2.2vw;
+}
+
+form fieldset {
+  float: left;
+  width: 23vw;
+  border: 0;
+}
+
+/* Estilos de clase */
+
+.popup {
+  color: black;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1.25em;
+  background-color: #fff;
+  box-shadow: 0 2px 10px black;
+  z-index: 1000;
+}
+  
+  
+/* Estilos de id */
+
+#val-box {
+  font-size: 0.7em;
+  text-align: left;
+  background-color: #002e54;
+  padding-left: 0.8em;
+  padding-right: 0.8em;
+  padding-top: 0.4em;
+  padding-bottom: 0.4em;
+}
+
+#deportes {
+  height: 3vw;
+}
+
+  

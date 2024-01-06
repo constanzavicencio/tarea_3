@@ -1,0 +1,71 @@
+{% extends '/base.html' %}
+
+{% block title %} Listado de Artesanos {% endblock %}
+
+{% block css %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style-listado.css')}}" />
+{% endblock %}
+
+{% block content %}
+<h2>Lista de Artesanos(as)</h2>
+<div type="table" id="tabla-listado">
+  <table>
+    <tr>
+      <td>Nombre</td>
+      <td>Teléfono</td>
+      <td>Comuna</td>
+      <td>Tipo artesanía</td>
+      <td>Fotos</td>  
+    </tr>
+
+    {% if data %}
+      {% for artesano in data%}
+        <tr>
+          <td>
+            <a id="nombre-btn" href="{{ url_for('verinfoartesano', nombre = artesano.nombre) }}">{{artesano.nombre}}</a>
+          </td>
+          <td>{{artesano.celular}}</td>
+          <td>{{artesano.comuna}}</td>
+          <td>{{artesano.tipo_artesania}}</td>
+          <td>
+            <img src="{{ artesano.fotos1 }}" class="img"/>
+            
+            {% if artesano.fotos2 %}
+              <img src="{{ artesano.fotos2 }}" class="img"/>
+            {% endif %}
+
+            {% if artesano.fotos3 %}
+              <img src="{{ artesano.fotos3 }}" class="img"/>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor%}
+    {% endif %}
+
+  </table>
+  <br>
+  <form method="get" action="{{ url_for('listado_artesanos', page=page + 1) }}">
+    <div class="btnb">
+      <button type="submit">Avanzar</button>
+    </div>
+  </form>
+
+  <br>
+
+  <form method="get" action="{{ url_for('listado_artesanos', page = page - 1) }}">
+    <div class="btnb">
+      <button type="submit">Retroceder</button>
+    </div>
+  </form>
+
+  <br>
+
+  <a class="btnb" href="{{ url_for('index') }}">Volver al menu</a>
+
+</div>
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}

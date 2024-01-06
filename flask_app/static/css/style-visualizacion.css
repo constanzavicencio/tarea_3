@@ -1,0 +1,62 @@
+/* Estilos de tipo */
+
+strong {
+  font-family: 'DIN';
+  font-weight: bold;
+}
+
+button{
+  color: black;
+  background-color: white;
+  position: fixed;
+  top: 90%;
+  padding: .5em; 
+  border: 0;
+}
+
+/* Estilos de clase */
+
+.main-container{
+  text-align: left;
+}
+
+#img1{
+    position:absolute;
+    top:38vh;
+    left:1vw;
+    width:14vw;
+    height:23vh;
+}
+
+#img2{
+  position:absolute;
+  top:38vh;
+  left:16vw;
+  width:14vw;
+  height:23vh;
+}
+
+#img3{
+  position:absolute;
+  top:38vh;
+  left:31vw;
+  width:14vw;
+  height:23vh;
+}
+
+#btn-volver{
+  color: black; 
+  position:absolute;
+  top:65vh;
+  left:1vw;
+  width:14vw;
+  height:23vh;
+  background-color: white; 
+  padding: .5em;
+  text-align: center;
+  text-decoration: none;
+  width: 16vw;
+  height: 6vh;
+  border-radius: .5em;
+}
+
