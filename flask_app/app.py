@@ -6,8 +6,7 @@ import hashlib
 import filetype
 import os
 
-#UPLOAD_FOLDER = '/static/uploads'
-UPLOAD_FOLDER = 'c:/Users/Adm/Documents/Constanza/github/2023-2-desarrollo-apps-web/tarea2-corregida/tarea-2/flask_app/static/uploads'
+UPLOAD_FOLDER = 'static/uploads'
 
 app = Flask(__name__, template_folder='templates')
 
@@ -35,7 +34,6 @@ def listado_hinchas():
 @app.route('/registrar-artesano', methods=['GET', 'POST'])
 def registrar_artesano():
     if request.method == 'POST':
-        print("POST")
         region = request.form.get('regiones')
         comuna = request.form.get('comunas')
         nombre = request.form.get('nombre')
@@ -44,14 +42,10 @@ def registrar_artesano():
         descripcion_artesania = request.form.get('descArtesania')
         artesanias = request.form.getlist('tipoArtesania')
         imagenes_artesania = request.files.getlist('imgArtesanias')
-        print(len(imagenes_artesania))
-        
-        print(validar_artesano(region, comuna, artesanias, nombre, email, numero, imagenes_artesania))
 
         error = ""
         status, msg = validar_artesano(region, comuna, artesanias, nombre, email, numero, imagenes_artesania)
         if status:
-            print("validado")
             # Obtener id region
             art_region = db.get_region_id_by_name(region)
             # Obtener id comuna de acuerdo al id region
@@ -61,36 +55,27 @@ def registrar_artesano():
             db.insertar_artesano(art_comuna, descripcion_artesania, nombre, email, numero)
             artesano_id = db.get_artesano_id_by_name(nombre)
 
-            #print(hashlib.sha256(secure_filename(imagenes_artesania[0].filename).encode("utf-8")).hexdigest())
-            #print(filetype.guess(imagenes_artesania[0]).extension)
-
             # Insertar imágenes
             for imagen in imagenes_artesania:
-                print("Se ingresa a una imagen")
+                
                 _filename = hashlib.sha256(secure_filename(imagen.filename).encode("utf-8")).hexdigest()
                 _extension = filetype.guess(imagen).extension
                 img_filename = f"{_filename}.{_extension}"
-                print("Se definen las variables")
-                # guardar imagen como archivo
-                img_path = os.path.join(UPLOAD_FOLDER, img_filename)
-                print(img_path)
-                imagen.save(img_path)
-                print("Se guardó la imagen como archivo")
+                
+                basedir = os.path.abspath(os.path.dirname(__file__))
+                imagen.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], img_filename))
+                
                 # guardar imagen en la base de datos
                 nombre_archivo = img_filename
-                ruta_archivo = "./static/uploads/"+str(img_filename)
-                print(nombre_archivo, ruta_archivo)
+                ruta_archivo = "/static/uploads/"+str(img_filename)
                 db.insertar_foto(ruta_archivo, nombre_archivo, artesano_id)
-                print("Se guardó la imagen en la base de datos")
+                
 
             # Insertar por tipo de artesanía
             artesanias_list = ["marmol", "madera", "ceramica", "mimbre", "metal", "cuero", "telas", "joyas", "otro tipo"]
             artesanias_Selected = []
 
-            #largo_artesanias = len(artesanias_Selected)
-
             for artesania in artesanias:
-                #artesanias_Selected.append(artesanias_list[int(i)]) HAY QUE OBTENER EL ID
                 id_artesania = artesanias_list.index(artesania) + 1
                 artesanias_Selected.append(id_artesania)
 
@@ -103,12 +88,11 @@ def registrar_artesano():
                     if largo_artesanias == 3:
                         db.insertar_artesano_tipo(artesano_id, artesanias_Selected[2])
 
-            return redirect(url_for("index")) ## cambiar a mostrar box
+            return render_template("registrar/agregar-artesano.html", error=error)
         else: 
             error += msg
             return render_template("registrar/agregar-artesano.html", error=error)
     elif request.method == 'GET':
-        print("GET")
         msg = ""
         return render_template("registrar/agregar-artesano.html")
     
