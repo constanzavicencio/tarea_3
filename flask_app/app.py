@@ -88,7 +88,7 @@ def registrar_artesano():
                     if largo_artesanias == 3:
                         db.insertar_artesano_tipo(artesano_id, artesanias_Selected[2])
 
-            return render_template("registrar/agregar-artesano.html", error=error)
+            return redirect(url_for("index"))
         else: 
             error += msg
             return render_template("registrar/agregar-artesano.html", error=error)
