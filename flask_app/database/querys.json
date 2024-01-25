@@ -21,7 +21,19 @@
     "get_artesano_id_by_name" : "SELECT id FROM artesano WHERE nombre=%s;",
 
     "get_all_artesano": "SELECT * FROM artesano WHERE nombre=%s",
+    "get_comuna_id": "SELECT id FROM comuna WHERE nombre=%s;",
     "get_comuna_by_id": "SELECT nombre FROM comuna WHERE id=%s;",
+
+    "get_all_hincha": "SELECT * FROM hincha WHERE nombre=%s",
+
+    "create_deportes_hincha": "INSERT INTO hincha_deporte (hincha_id, deporte_id) VALUES (%s, %s);",
+    "get_deportes_hincha": "SELECT deporte_id FROM hincha_deporte WHERE hincha_id=%s;",
+    "create_hincha": "INSERT INTO hincha (comuna_id, modo_transporte, nombre, email, celular, comentarios) VALUES (%s,%s,%s,%s,%s,%s);",
+
+    "get_hinchas": "SELECT id FROM hincha WHERE nombre=%s;",
+    "get_list_hinchas": "SELECT * FROM hincha ORDER BY id DESC LIMIT %s;",
+    "get_deporte": "SELECT id FROM deporte WHERE nombre=%s;",
+    "get_deportes_byindex": "SELECT nombre FROM deporte WHERE id=%s;",
 
     "get_region_by_id": "SELECT region_id FROM comuna WHERE id=%s;",
     "get_region_byregid": "SELECT nombre FROM region WHERE id=%s;",

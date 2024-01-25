@@ -6,5 +6,3 @@
 
 * Formato teléfono: +56 9 1234 5678
 * Formato email: aaa@bbbb.ccc o aaa@bbbb.ccc.dd
-
-* Arreglar el UPLOAD_FOLDER en registrar artesano (app.py)

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from util.validations import validar_artesano
+from util.validations import validar_artesano, validar_hincha
 from database import db
 from werkzeug.utils import secure_filename
 import hashlib
@@ -21,15 +21,108 @@ def index():
     
 @app.route('/registrar-hincha', methods=['GET', 'POST'])
 def registrar_hincha():
-    if request.method == 'GET':
-        return render_template('registrar/agregar-hincha.html')
     if request.method == 'POST':
-        return render_template('registrar/agregar-hincha.html')
+        print("POST")
+        deportes = request.form.getlist('deportes')
+        region = request.form.get('regiones')
+        comuna = request.form.get('comunas')
+        nombre = request.form.get('nombre')
+        email = request.form.get('email')
+        numero = request.form.get('numero')
+        comentarios = request.form.get('comentarios')
+        transporte = request.form.get('transporte')
+
+        print(deportes, region, comuna, transporte, nombre, email, numero, comentarios)
+
+        error = ""
+        status, msg = validar_hincha(deportes, region, comuna, transporte, nombre, email, numero, comentarios)
+        print(status)
+        print(msg)
+        if status:
+            print("Primer status OK")
+            #deportes_list = ["Clavados","Natación","Natación artística","Polo acuático","Natación en Aguas abiertas","Maratón","Marcha","Atletismo","Bádminton","Balonmano","Básquetbol","Básquetbol 3x3","Béisbol","Boxeo","Bowling","Breaking","Canotaje Slalom","Canotaje de velocidad","BMX Freestyle","BMX Racing","Mountain Bike","Ciclismo pista","Ciclismo ruta","Adiestramiento ecuestre","Evento completo ecuestre","Salto ecuestre","Escalada deportiva","Esgrima","Esquí acuático y Wakeboard","Fútbol","Gimnasia artística Masculina","Gimnasia artística Femenina","Gimnasia rítmica","Gimnasia trampolín","Golf","Hockey césped","Judo","Karate","Levantamiento de pesas","Lucha","Patinaje artístico","Skateboarding","Patinaje velocidad","Pelota vasca","Pentatlón moderno","Racquetball","Remo","Rugby 7","Sóftbol","Squash","Surf","Taekwondo","Tenis","Tenis de mesa","Tiro","Tiro con arco","Triatlón","Vela","Vóleibol","Vóleibol playa"]
+            deportes_Selected = []
+            for i in deportes:
+                deportes_Selected.append(i)
+            
+            # Insertar hincha
+            status, msg = db.insertar_hincha(comuna, transporte, nombre, email, numero, comentarios)
+
+
+            largo_deportes = len(deportes_Selected)
+
+            if largo_deportes >= 1:
+                db.insertar_hincha_deporte(nombre, deportes_Selected[0])
+                if largo_deportes >= 2:
+                    db.insertar_hincha_deporte(nombre, deportes_Selected[1])
+                    if largo_deportes == 3:
+                        db.insertar_hincha_deporte(nombre, deportes_Selected[2])
+
+            if status:
+                print("Segundo status OK")
+                return redirect(url_for("index"))
+        else: 
+            error += msg
+            print("Hay un error")
+            print("Hay un error")
+            print("Hay un error")
+            print("Hay un error")
+            print("Hay un error")
+            print("Hay un error")
+            print("Hay un error")
+            return render_template("registrar/agregar-hincha.html", error=error)
     
-@app.route('/listado-hinchas', methods=['GET', 'POST'])
-def listado_hinchas():
-    if request.method == 'GET':
-        return render_template('listado/ver-hinchas.html')
+    elif request.method == 'GET':
+        msg = ""
+        return render_template("registrar/agregar-hincha.html")
+    
+@app.route("/listado_hinchas/<int:page>", methods=["GET"])
+def listado_hinchas(page):
+    if page < 0:
+        return redirect(url_for("listado_hinchas", page=0, data=data))
+    else:
+        pagenum = int(page)
+        
+    PAGE_SIZE = 5
+    data = []
+    for hincha in db.get_list_hinchas(page_size=PAGE_SIZE):
+        id, comuna_id, modo_transporte, nombre, email, celular, comentarios = hincha
+        print(hincha)
+
+        # Se transforman los ids de las comunas a sus nombres
+        comuna_data = db.get_comuna_byindex(comuna_id)
+        comuna = comuna_data[0][0]
+        
+        deportes_list = ""
+        deplist = db.get_deportes_hincha(id)
+        deportes_Selected = []
+        for i in deplist:
+            dept_nombre = db.get_deportes_byindex(i[0])
+            deportes_list += dept_nombre[0][0] + ", "
+            deportes_Selected.append(dept_nombre[0][0])
+        deportes_list = deportes_list[:-2]
+
+        cantidad_deportes = len(deplist)
+        if cantidad_deportes >= 1:
+            deporte1 = deportes_Selected[0]
+            deporte2, deporte3 = "", ""
+            if cantidad_deportes >= 2:
+                deporte2 = deportes_Selected[1]
+                if cantidad_deportes == 3:
+                    deporte3 = deportes_Selected[2]
+
+        data.append({
+            "nombre": nombre,
+            "comuna": comuna,
+            "transporte": modo_transporte,
+            "numero": celular,
+            "deporte1": deporte1,
+            "deporte2": deporte2,
+            "deporte3": deporte3
+        })
+
+
+    return render_template("listado/ver-hinchas.html", page=page, data=data)
 
 @app.route('/registrar-artesano', methods=['GET', 'POST'])
 def registrar_artesano():
@@ -96,66 +189,60 @@ def registrar_artesano():
         msg = ""
         return render_template("registrar/agregar-artesano.html")
     
-@app.route("/verinfohincha/<int:id>", methods=["GET"])
-def verinfohincha(id):
+@app.route("/verinfohincha/<nombre>", methods=["GET"])
+def verinfohincha(nombre):
     data = []
-    if id == 1:
-        nombre = "Nicole"
-        region = "Región Metropolitana"
-        comuna = "Maipú"
-        email = "nicole123@gmail.com"
-        deportes_list = ["Tenis", "Natación"]
-        modo_transporte = "Particular"
-        celular = "+56 9 8765 4321"
-        comentarios = "Sí"
-    if id == 2:
-        nombre = "Nicolás"
-        region = "RM"
-        comuna = "Cerro Navia"
-        email = "nicouwu@gmail.com"
-        deportes_list = ["Balonmano"]
-        modo_transporte = "Particular"
-        celular = "+56 9 5500 1122"
-        comentarios = ""
-    if id == 3:
-        nombre = "Josefina"
-        region = "Región de Valparaíso"
-        comuna = "Viña del Mar"
-        email = "jose2002@hotmail.com"
-        deportes_list = ["Fútbol", "Boxeo"]
-        modo_transporte = "Locomoción colectiva"
-        celular = "+56 9 7890 1234"
-        comentarios = ""
-    if id == 4:
-        nombre = "Juan"
-        region = "Región de Tarapacá"
-        comuna = "Iquique"
-        email = "juan3007@hotmail.com"
-        deportes_list = ["Fútbol", "BMX Racing", "Esgrima"]
-        modo_transporte = "Locomoción colectiva"
-        celular = "+56 9 6655 7788"
-        comentarios = ""
-    if id == 5:
-        nombre = "María"
-        region = "Región de Los Lagos"
-        comuna = "Puerto Montt"
-        email = "mary@gmail.com"
-        deportes_list = ["Salto ecuestre"]
-        modo_transporte = "Particular"
-        celular = "+56 9 2345 6789"
-        comentarios = "Hola mundo"
-        
-    data.append({
-        "nombre": nombre,
-        "region": region,
-        "comuna": comuna,
-        "email": email,
-        "deportes": deportes_list,
-        "modo_transporte": modo_transporte,
-        "numero": celular,
-        "comentario": comentarios
-    })
+    id, comuna_id, modo_transporte, nombre, email, celular, comentarios = db.get_all_hincha(nombre)[0]
+    print(id, comuna_id, modo_transporte, nombre, email, celular, comentarios)
+    # Se transforman los ids de las comunas a sus nombres
+    comuna_data = db.get_comuna_byindex(comuna_id)
+    comuna = comuna_data[0][0]
 
+    
+
+    # Obtenemos la region
+    region_data_c = db.get_region_by_id(comuna_id)
+    region_data = region_data_c[0][0]
+    region = db.get_region_byregid(region_data)[0][0]
+
+    #deplist = db.get_deportes_hincha(id)
+    #print(deplist)
+    #deportes_list = ["Clavados","Natación","Natación artística","Polo acuático","Natación en Aguas abiertas","Maratón","Marcha","Atletismo","Bádminton","Balonmano","Básquetbol","Básquetbol 3x3","Béisbol","Boxeo","Bowling","Breaking","Canotaje Slalom","Canotaje de velocidad","BMX Freestyle","BMX Racing","Mountain Bike","Ciclismo pista","Ciclismo ruta","Adiestramiento ecuestre","Evento completo ecuestre","Salto ecuestre","Escalada deportiva","Esgrima","Esquí acuático y Wakeboard","Fútbol","Gimnasia artística Masculina","Gimnasia artística Femenina","Gimnasia rítmica","Gimnasia trampolín","Golf","Hockey césped","Judo","Karate","Levantamiento de pesas","Lucha","Patinaje artístico","Skateboarding","Patinaje velocidad","Pelota vasca","Pentatlón moderno","Racquetball","Remo","Rugby 7","Sóftbol","Squash","Surf","Taekwondo","Tenis","Tenis de mesa","Tiro","Tiro con arco","Triatlón","Vela","Vóleibol","Vóleibol playa"]
+    #deportes_Selected = []
+    #for i in deplist:
+    #    deportes_Selected.append(deportes_list[int(i)])
+
+    deportes_list = ""
+    deplist = db.get_deportes_hincha(id)
+    deportes_Selected = []
+    for i in deplist:
+        dept_nombre = db.get_deportes_byindex(i[0])
+        deportes_list += dept_nombre[0][0] + ", "
+        deportes_Selected.append(dept_nombre[0][0])
+    deportes_list = deportes_list[:-2]
+
+    cantidad_deportes = len(deplist)
+    if cantidad_deportes >= 1:
+        deporte1 = deportes_Selected[0]
+        deporte2, deporte3 = "", ""
+        if cantidad_deportes >= 2:
+            deporte2 = deportes_Selected[1]
+            if cantidad_deportes == 3:
+                deporte3 = deportes_Selected[2]
+
+    data.append({
+            "nombre": nombre,
+            "region": region,
+            "comuna": comuna,
+            "email": email,
+            "transporte": modo_transporte,
+            "numero": celular,
+            "deporte1": deporte1,
+            "deporte2": deporte2,
+            "deporte3": deporte3,
+            "comentarios": comentarios
+        })
+        
     return render_template("informacion/informacion-hincha.html", data=data)
 
 @app.route("/verinfoartesano/<nombre>", methods=["GET"])

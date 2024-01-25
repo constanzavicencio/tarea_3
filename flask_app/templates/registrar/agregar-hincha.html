@@ -1,6 +1,6 @@
 {% extends '/base.html' %}
 
-{% block title %} Registro hinchas {% endblock %}
+{% block title %} Registro Hinchas {% endblock %}
 
 {% block css %}
   {{ super() }}
@@ -10,7 +10,7 @@
 {% block content %}
 <div class="main-container">
   <div>
-    <h2>Registro hinchas</h2>
+    <h2>Registro Hinchas</h2>
     <p>A continuación, rellene el formulario con sus datos.</p>
   </div>
 
@@ -19,42 +19,41 @@
       <p id="val-list"></p>
   </div>
 
-  
   <form id="formulario-hincha" method="post" enctype="multipart/form-data">
-  <fieldset>
+    <fieldset>
       <label for="deportes">Deportes</label><br>
-      <select id="deportes" multiple required></select><br>
+      <select name="deportes" id="deportes" multiple required></select><br>
 
       <label for="regiones">Región</label><br>
-      <select id="regiones"></select><br>
+      <select name="regiones" id="regiones"></select><br>
 
       <label for="comunas">Comuna</label><br>
-      <select id="comunas"></select><br>
+      <select name="comunas" id="comunas"></select><br>
 
       <label for="transporte">Modo de transporte</label><br>
-      <select id="transporte" required>
+      <select name="transporte" id="transporte" required>
           <option value="">Seleccione un transporte</option>
           <option value="particular">Particular</option>
           <option value="locomocion_publica">Locomoción pública</option>
       </select><br>
-  </fieldset>
-
-  <fieldset>
+    </fieldset>
+  
+    <fieldset>
       <label for="nombre">Nombre</label><br>
-      <input type="text" id="nombre" minlength="3" maxlength="80" required><br>
+      <input name="nombre" type="text" id="nombre" minlength="3" maxlength="80" required><br>
 
       <label for="email">Email de contacto</label><br>
-      <input type="email" id="email" maxlength="30" required><br>
+      <input name="email" type="email" id="email" maxlength="30" required><br>
 
       <label for="numero">Número celular de contacto</label><br>
-      <input type="text" id="numero" minlength="15" maxlength="15"><br>
+      <input name="numero" type="text" id="numero" minlength="15" maxlength="15"><br>
 
       <label for="comentarios">Comentarios adicionales</label><br>
-      <input type="text" id="comentarios" maxlength="80"><br><br>
-  </fieldset>
+      <input name="comentarios" type="text" id="comentarios" maxlength="80"><br><br>
+    </fieldset>
 
       <br><input id="submit-btn" type="button" value="Enviar">
-</form>
+  </form>
 
 <div class="popup" id="confirmation-box">
   <p>¿Confirma el registro de este hincha?</p>
@@ -63,7 +62,7 @@
 </div>
 
 <div id="sent-box" hidden>
-  <p>Hemos recibido el registro de Hincha. Muchas gracias.</p>
+  <p>Hemos recibido el registro de hincha. Muchas gracias.</p>
   <p><a class="index-btn" href="{{ url_for('index') }}">Volver al Inicio</a></p>
 </div>
 

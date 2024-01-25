@@ -1,65 +1,49 @@
-{% extends '/base.html' %}
+{% extends 'base.html' %}
 
-{% block title %} Información Hincha {% endblock %}
+{% block title %} Informacion Hinchas {% endblock %}
 
 {% block css %}
 {{ super() }}
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="{{ url_for('static', filename='css/style-visualizacion.css')}}"
-/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="/static/css/style-visualizacion.css">
 {% endblock %}
 
 {% block content %}
-<body>
-    <div class="main-container">
-        <div>
-            <h1>Información del Hincha</h1>
-        </div>
-        <div>
-            {% if data %}
-                {% for hincha in data%}
-                <div class="hincha-container">
-                    <tr>
-                    <strong>Nombre: </strong>
-                        <span>{{hincha.nombre}}</span><br><br>
-                    
-                    <strong>Deporte/s que le interesa apoyar: </strong>
-                    {% for deporte in hincha.deportes%}
-                        <li>{{deporte}}</li>
-                    {% endfor%}
-                    
-                    <br><strong>Región: </strong>
-                        <span>{{hincha.region}}</span><br><br>
-                    
-                    <strong>Comuna: </strong>
-                        <span>{{hincha.comuna}}</span><br><br>
-                    
-                    <strong>Modo de Transporte: </strong>
-                        <span>{{hincha.modo_transporte}}<span><br><br>
-                    
-                    <strong>Email de contacto: </strong>
-                        <span>{{hincha.email}}</span><br><br>
-                    
-                    <strong>Número de contacto: </strong>
-                        <span>{{hincha.numero}}</span><br><br>
-                    
-                    <strong>Comentarios adicionales: </strong>
-                       <span>{{hincha.comentario}}</span><br><br>
-                    
-                    </tr>
-                </div>
-                {% endfor%}
+
+<h1>Información Hincha</h1>
+
+<div id="informacion">
+    {% if data %}
+        {% for hincha in data%}
+            <strong>Nombre: </strong><a>{{hincha.nombre}}</a><br>
+            <strong>Deportes: </strong>
+            <ul>
+                <li>{{hincha.deporte1}}</li>
+                {% if hincha.deporte2 %}
+                  <li>{{hincha.deporte2}}</li>
+                {% endif %}
+                {% if hincha.deporte3 %}
+                  <li>{{hincha.deporte3}}</li>
+                {% endif %}
+            </ul>
+            <br>
+            {% if hincha.comentarios %}
+                <strong>Comentarios: </strong><a>{{hincha.comentarios}}</a><br>
             {% endif %}
-        </div>
-        <div>
-            <button onclick="location.href='/listado-hinchas'">Volver al listado</button>
-        </div>
-    </div>
-</body>
+            <strong>Región: </strong><a>{{hincha.region}}</a><br>
+            <strong>Comuna: </strong><a>{{hincha.comuna}}</a><br>
+            <strong>Modo de transporte: </strong><a>{{hincha.transporte}}</a><br>
+            <strong>Email de contacto: </strong><a>{{hincha.email}}</a><br>
+            <strong>Teléfono de contacto: </strong><a>{{hincha.numero}}</a><br>
+        {% endfor%}
+    {% endif %}
+</div><br>
+
+<a id="btn-volver" href="{{ url_for('listado_hinchas', page=0) }}">Volver al listado de hinchas</a>
+
+
 {% endblock %}
 
 {% block javascript %}
-
+<!-- No utiliza javascript -->
 {% endblock %}

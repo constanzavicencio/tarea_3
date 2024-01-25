@@ -57,6 +57,7 @@ const validarNumero = (numero) => {
 };
 
 const validarForm = () => {
+    console.log("Comienza validación en JavaScript")
     let formHincha = document.forms["formulario-hincha"];
     let deportes = formHincha.deportes.value;
     let region = formHincha.regiones.value;
@@ -66,48 +67,58 @@ const validarForm = () => {
     let email = formHincha.email.value;
     let numero = formHincha.numero.value;
 
+    console.log(deportes)
+    console.log(region)
+    console.log(comuna)
+
     let invalidInputs = [];
     let isValid = true;
+
     const setInvalidInput = (inputName) => {
         invalidInputs.push(inputName);
-        if (invalidInputs.length > 0) {
-            isValid = false;
-        } else {
-            isValid = true;
-        }
-        
+        isValid = false;
     };
 
     if (!validarDeportes(deportes)) {
         setInvalidInput("Deportes");
-    } if (!validarRegion(region)) {
+    } 
+    if (!validarRegion(region)) {
         setInvalidInput("Región");
-    } if (!validarComuna(comuna)) {
+    } 
+    if (!validarComuna(comuna)) {
         setInvalidInput("Comuna");  
-    } if (!validarTransporte(transporte)) {
+    } 
+    if (!validarTransporte(transporte)) {
         setInvalidInput("Modo de transporte");  
-    } if (!validarNombre(nombre)) {
+    } 
+    if (!validarNombre(nombre)) {
         setInvalidInput("Nombre");
-    } if (!validarEmail(email)) {
+    } 
+    if (!validarEmail(email)) {
         setInvalidInput("Email de contacto");
-    } if (!validarNumero(numero)) {
+    } 
+    if (!validarNumero(numero)) {
         setInvalidInput("Número de contacto");
     }
 
-    // finally display validation
+    console.log("Continúa validación en JavaScript")
+
     let validationBox = document.getElementById("val-box");
-    
     let validationListElem = document.getElementById("val-list");
-    
-    validationListElem.innerText = "Los siguiente campos son inválidos: ";
+    validationListElem.innerText = "Los siguientes campos son inválidos: ";
 
     let sentBox = document.getElementById("sent-box");
 
+    console.log("Se está por enviar el formulario")
+
     const enviarForm = () => {
-        console.log('La función enviarForm se está ejecutando...');
+        console.log("La función enviarForm se está ejecutando...")
         let formHincha = document.forms["formulario-hincha"];
         sentBox.hidden = false;
-        formHincha.submit();
+        //formHincha.submit()
+        formHincha.submit(function(e) {
+            e.preventDefault();
+        });
     };
 
     const cerrarPopup = () => {
@@ -115,17 +126,23 @@ const validarForm = () => {
     };
 
     if (!isValid) {
+        console.log("No es válido")
         let invalidInputsLower = invalidInputs.map(elemento => elemento.toLowerCase());
         let invalidInputsString = invalidInputsLower.join(', ');
         validationListElem.innerText += invalidInputsString;
-       
+
         // make validation prompt visible
         validationBox.hidden = false;
 
     } else if (isValid) {
+        console.log("Es válido")
         document.querySelector('.popup').style.display = 'block';
+
         let confirmationBtn = document.getElementById("confirmation-btn");
         confirmationBtn.addEventListener("click", enviarForm);
+
+        console.log(nombre, region, comuna, numero)
+        
         let cancelBtn = document.getElementById("cancel-btn");
         cancelBtn.addEventListener("click", cerrarPopup)
     }

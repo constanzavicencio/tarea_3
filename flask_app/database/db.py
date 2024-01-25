@@ -25,7 +25,7 @@ def get_conn():
   return conn
 
 
-# Inserciones
+# Inserciones artesano
 
 def insertar_artesano(comuna_id, descripcion_artesania, nombre, email, celular):
   conn = get_conn()
@@ -44,6 +44,119 @@ def insertar_foto(ruta_archivo, nombre_archivo, artesano_id):
   cursor = conn.cursor()
   cursor.execute(QUERY_DICT["insertar_foto"], (ruta_archivo, nombre_archivo, artesano_id))
   conn.commit()
+
+# Inserciones hincha
+  
+#def insertar_hincha(comuna, transporte, nombre, email, numero, comentarios):
+#	conn = get_conn()	
+#	cursor = conn.cursor()
+#	cursor.execute(QUERY_DICT["get_comuna_id"], (comuna,))
+#	comuna_id = cursor.fetchall()
+#
+#	conn = get_conn()
+#	cursor = conn.cursor()
+#	cursor.execute(QUERY_DICT["create_hincha"], (comuna_id, transporte, nombre, email, numero, comentarios))
+#	conn.commit()
+#	return True, None
+#
+#def insertar_hincha_deporte(nombre, nombre_deporte):
+#	conn = get_conn()	
+#	cursor = conn.cursor()
+#	cursor.execute(QUERY_DICT["get_deporte"], (nombre_deporte,))
+#	deporte_data = cursor.fetchall()
+#
+#	conn = get_conn()	
+#	cursor = conn.cursor()
+#	cursor.execute(QUERY_DICT["get_hinchas"], (nombre,))
+#	hincha_data = cursor.fetchall()
+#     
+#	conn = get_conn()
+#	cursor = conn.cursor()
+#	cursor.execute(QUERY_DICT["create_deportes_hincha"], (hincha_data, deporte_data))
+#	conn.commit()
+#	return True, None
+  
+  # HINCHA #
+
+def create_hinchas(comuna, transporte, nombre, email, phone, comentario):
+	conn = get_conn()
+	cursor = conn.cursor()
+	cursor.execute(QUERY_DICT["create_hincha"], (comuna, transporte, nombre, email, phone, comentario))
+	conn.commit()
+
+def create_deportes_hincha(hincha_id, deporte_id):
+	conn = get_conn()
+	cursor = conn.cursor()
+	cursor.execute(QUERY_DICT["create_deportes_hincha"], (hincha_id, deporte_id))
+	conn.commit()
+
+def get_deportes(deporte_nombre):
+	conn = get_conn()	
+	cursor = conn.cursor()
+	cursor.execute(QUERY_DICT["get_deporte"], (deporte_nombre,))
+	depte = cursor.fetchall()
+	return depte
+
+def insertar_hincha(comuna, transporte, nombre, email, phone, comentario):
+	# 1. get comuna_id
+	comuna_id = get_comuna_id(comuna)
+	# 2. create user
+	create_hinchas(comuna_id, transporte, nombre, email, phone, comentario)
+	return True, None
+
+def get_comuna_id(comuna):
+	conn = get_conn()	
+	cursor = conn.cursor()
+	cursor.execute(QUERY_DICT["get_comuna_id"], (comuna,))
+	com_id = cursor.fetchall()
+	return com_id
+
+def get_list_hinchas(page_size):
+	conn = get_conn()
+	cursor = conn.cursor()
+	cursor.execute(QUERY_DICT["get_list_hinchas"], (page_size,))
+	list_hinchas = cursor.fetchall()
+	return list_hinchas
+
+def get_deportes_hincha(hincha_id):
+	conn = get_conn()	
+	cursor = conn.cursor()
+	cursor.execute(QUERY_DICT["get_deportes_hincha"], (hincha_id,))
+	depte_hincha = cursor.fetchall()
+	return depte_hincha
+
+def get_deportes(deporte_nombre):
+	conn = get_conn()	
+	cursor = conn.cursor()
+	cursor.execute(QUERY_DICT["get_deporte"], (deporte_nombre,))
+	depte = cursor.fetchall()
+	return depte
+
+def get_deportes_byindex(deporte_id):
+	conn = get_conn()	
+	cursor = conn.cursor()
+	cursor.execute(QUERY_DICT["get_deportes_byindex"], (deporte_id,))
+	depte = cursor.fetchall()
+	return depte
+
+def get_hinchas(nombre):
+	conn = get_conn()	
+	cursor = conn.cursor()
+	cursor.execute(QUERY_DICT["get_hinchas"], (nombre,))
+	hinchas = cursor.fetchall()
+	return hinchas
+
+def insertar_hincha_deporte(hincha, deporte_nombre):
+	# Se obtienen los indices del deporte
+	deporte_data = get_deportes(deporte_nombre)
+
+	# Se obtiene el id de hincha
+	hincha_data = get_hinchas(hincha)
+
+	# Se guarda la informacion en la base de datos
+	create_deportes_hincha(hincha_data, deporte_data)
+	return True, None
+
 
 # Listados
 
@@ -75,6 +188,13 @@ def get_all_artesano(nombre):
 	cursor.execute(QUERY_DICT["get_all_artesano"], (nombre,))
 	artesano = cursor.fetchall()
 	return artesano
+
+def get_all_hincha(nombre):
+	conn = get_conn()
+	cursor = conn.cursor()
+	cursor.execute(QUERY_DICT["get_all_hincha"], (nombre,))
+	hincha = cursor.fetchall()
+	return hincha
 
 def get_list_artesanos(page):
 	offset = page * 5

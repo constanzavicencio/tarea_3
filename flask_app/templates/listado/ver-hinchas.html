@@ -8,68 +8,62 @@
 {% endblock %}
 
 {% block content %}
-<body>
-  <div class="main-container">
-    <div class="tabla">
-      <table class="default">
-        <tr class="titulos">      
-          <td><strong>Nombre</strong></td>
-          <td><strong>Comuna</strong></td>
-          <td><strong>Deportes</strong></td>
-          <td><strong>Modo de transporte</strong></td>
-          <td><strong>Teléfono</strong></td>           
-        </tr> 
+<h2>Lista de Hinchas</h2>
+<div type="table" id="tabla-listado">
+  <table>
+    <tr>
+      <td>Nombre</td>
+      <td>Teléfono</td>
+      <td>Comuna</td>
+      <td>Deportes</td>
+      <td>Modo de transporte</td>  
+    </tr>
+
+    {% if data %}
+      {% for hincha in data%}
         <tr>
           <td>
-            <button onclick="location.href='/verinfohincha/1'">Nicole</button>
-          </td>     
-          <td>Maipú</td>      
-          <td>Tenis, Natación</td>
-          <td>Particular</td>
-          <td>+56 9 8765 4321</td>           
+            <a id="nombre-btn" href="{{ url_for('verinfohincha', nombre = hincha.nombre) }}">{{hincha.nombre}}</a>
+          </td>
+          <td>{{hincha.numero}}</td>
+          <td>{{hincha.comuna}}</td>
+          <td>
+            <ul>
+                <li>{{hincha.deporte1}}</li>
+                {% if hincha.deporte2 %}
+                  <li>{{hincha.deporte2}}</li>
+                {% endif %}
+                {% if hincha.deporte3 %}
+                  <li>{{hincha.deporte3}}</li>
+                {% endif %}
+          </ul>
+          </td>
+          <td>{{hincha.transporte}}</td>
         </tr>
-        <tr>
-          <td>
-            <button onclick="location.href='/verinfohincha/2'">Nicolás</button>
-          </td>     
-          <td>Cerro Navia</td>      
-          <td>Balonmano</td>
-          <td>Particular</td>
-          <td>+56 9 5500 1122</td>           
-        </tr>
-        <tr>
-          <td>
-            <button onclick="location.href='/verinfohincha/3'">Josefina</button>
-          </td>   
-          <td>Viña del Mar</td>      
-          <td>Fútbol, Boxeo</td>
-          <td>Locomoción particular</td>
-          <td>+56 9 7890 1234</td>           
-        </tr>
-        <tr>
-          <td>
-            <button onclick="location.href='/verinfohincha/4'">Juan</button>
-          </td>   
-          <td>Iquique</td>      
-          <td>Fútbol, BMX Racing, Esgrima</td>
-          <td>Locomoción particular</td>
-          <td>+56 9 6655 7788</td>           
-        </tr>
-        <tr>
-          <td>
-            <button onclick="location.href='/verinfohincha/5'">María</button>
-          </td>           
-          <td>Puerto Montt</td>      
-          <td>Salto ecuestre</td>
-          <td>Particular</td>
-          <td>+56 9 2345 6789</td>           
-        </tr>         
-      </table>
+      {% endfor%}
+    {% endif %}
+
+  </table>
+  <br>
+  <form method="get" action="{{ url_for('listado_hinchas', page=page + 1) }}">
+    <div class="btnb">
+      <button type="submit">Avanzar</button>
     </div>
-    
-    <a class="btnb" href="{{ url_for('index') }}">Volver al menu</a>
-  </div> 
-</body>
+  </form>
+
+  <br>
+
+  <form method="get" action="{{ url_for('listado_hinchas', page = page - 1) }}">
+    <div class="btnb">
+      <button type="submit">Retroceder</button>
+    </div>
+  </form>
+
+  <br>
+
+  <a class="btnb" href="{{ url_for('index') }}">Volver al menu</a>
+
+</div>
 {% endblock %}
 
 {% block javascript %}
