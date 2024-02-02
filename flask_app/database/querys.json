@@ -1,6 +1,8 @@
 {
     "insertar_artesano" : "INSERT INTO artesano (comuna_id, descripcion_artesania, nombre, email, celular) VALUES (%s,%s,%s,%s,%s);",
     "listado_artesanos" : "SELECT id, comuna_id, descripcion_artesania, nombre, email, celular FROM artesano ORDER BY id DESC;",
+    "listado_hinchas" : "SELECT id, comuna_id, modo_transporte, nombre, email, celular, comentarios FROM hincha ORDER BY id DESC;",
+    
     "primeros_5_artesanos" : "SELECT id, comuna_id, descripcion_artesania, nombre, email, celular FROM artesano ORDER BY id DESC LIMIT 0, 5;",
     "siguientes_5_artesanos" : "SELECT id, comuna_id, descripcion_artesania, nombre, email, celular FROM artesano ORDER BY id DESC LIMIT 5, 5;",
     "siguientes_5_artesanos_comuna" : "SELECT artesano.id, comuna.nombre, descripcion_artesania, artesano.nombre, email, celular FROM artesano, comuna WHERE artesano.comuna_id=comuna.id ORDER BY id DESC LIMIT 5, 5;",
@@ -34,6 +36,12 @@
     "get_list_hinchas": "SELECT * FROM hincha ORDER BY id DESC LIMIT %s;",
     "get_deporte": "SELECT id FROM deporte WHERE nombre=%s;",
     "get_deportes_byindex": "SELECT nombre FROM deporte WHERE id=%s;",
+
+    "get_deportes_names": "SELECT nombre FROM deporte ORDER BY nombre DESC",
+
+    "get_artesanias_names": "SELECT nombre FROM tipo_artesania ORDER BY nombre DESC",
+    "get_artesanias_artesano": "SELECT tipo_artesania_id FROM artesano_tipo WHERE artesano_id=%s;",
+    "get_artesanias_byindex": "SELECT nombre FROM tipo_artesania WHERE id=%s;",
 
     "get_region_by_id": "SELECT region_id FROM comuna WHERE id=%s;",
     "get_region_byregid": "SELECT nombre FROM region WHERE id=%s;",

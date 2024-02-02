@@ -1,8 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify, json
+from flask_cors import cross_origin
+from datetime import datetime, timedelta
 from util.validations import validar_artesano, validar_hincha
 from database import db
 from werkzeug.utils import secure_filename
 import hashlib
+import random
 import filetype
 import os
 
@@ -198,19 +201,10 @@ def verinfohincha(nombre):
     comuna_data = db.get_comuna_byindex(comuna_id)
     comuna = comuna_data[0][0]
 
-    
-
     # Obtenemos la region
     region_data_c = db.get_region_by_id(comuna_id)
     region_data = region_data_c[0][0]
     region = db.get_region_byregid(region_data)[0][0]
-
-    #deplist = db.get_deportes_hincha(id)
-    #print(deplist)
-    #deportes_list = ["Clavados","Natación","Natación artística","Polo acuático","Natación en Aguas abiertas","Maratón","Marcha","Atletismo","Bádminton","Balonmano","Básquetbol","Básquetbol 3x3","Béisbol","Boxeo","Bowling","Breaking","Canotaje Slalom","Canotaje de velocidad","BMX Freestyle","BMX Racing","Mountain Bike","Ciclismo pista","Ciclismo ruta","Adiestramiento ecuestre","Evento completo ecuestre","Salto ecuestre","Escalada deportiva","Esgrima","Esquí acuático y Wakeboard","Fútbol","Gimnasia artística Masculina","Gimnasia artística Femenina","Gimnasia rítmica","Gimnasia trampolín","Golf","Hockey césped","Judo","Karate","Levantamiento de pesas","Lucha","Patinaje artístico","Skateboarding","Patinaje velocidad","Pelota vasca","Pentatlón moderno","Racquetball","Remo","Rugby 7","Sóftbol","Squash","Surf","Taekwondo","Tenis","Tenis de mesa","Tiro","Tiro con arco","Triatlón","Vela","Vóleibol","Vóleibol playa"]
-    #deportes_Selected = []
-    #for i in deplist:
-    #    deportes_Selected.append(deportes_list[int(i)])
 
     deportes_list = ""
     deplist = db.get_deportes_hincha(id)
@@ -249,7 +243,6 @@ def verinfohincha(nombre):
 def verinfoartesano(nombre):
 
     data = []
-    print(db.get_all_artesano(nombre))
     id, comuna_id, descripcion_artesania, nombre, email, celular = db.get_all_artesano(nombre)[0]
 
     # Se transforman los ids de las comunas a sus nombres
@@ -350,6 +343,54 @@ def listado_artesanos(page):
 
 
     return render_template("listado/ver-artesanos.html", page=page, data=data)
+
+@app.route("/graficos", methods=["GET"])
+def graficos():
+    def get_hincha_deportes(hincha):
+        id = hincha[0]
+        deplist = db.get_deportes_hincha(id)
+        deportes_Selected = []
+        for i in deplist:
+            dept_nombre = db.get_deportes_byindex(i[0])
+            deportes_Selected.append(dept_nombre[0][0])
+        return deportes_Selected
+
+    deportes = db.obtener_deportes()
+    deportes_dict = {}
+    for i in range(len(deportes)):
+        deportes_dict[deportes[i][0]] = 0
+
+    for hincha in db.obtener_hinchas():
+        lista_deportes = get_hincha_deportes(hincha)
+        for deporte in lista_deportes:
+            deportes_dict[deporte] += 1
+
+    deportes_dict_json = json.dumps(deportes_dict)
+
+    def get_artesano_artesanias(artesano):
+        id = artesano[0]
+        artlist = db.get_artesanias_artesano(id)
+        artesanias_Selected = []
+        for i in artlist:
+            art_nombre = db.get_artesanias_byindex(i[0])
+            artesanias_Selected.append(art_nombre[0][0])
+        return artesanias_Selected
+
+    artesanias = db.obtener_artesanias()
+    artesanias_dict = {}
+    for i in range(len(artesanias)):
+        artesanias_dict[artesanias[i][0]] = 0
+
+    for artesano in db.obtener_artesanos():
+        lista_artesanias = get_artesano_artesanias(artesano)
+        for artesania in lista_artesanias:
+            artesanias_dict[artesania] += 1
+
+    artesanias_dict_json = json.dumps(artesanias_dict)
+
+    return render_template("graficos/graficos.html", deportes_dict=deportes_dict_json, artesanias_dict=artesanias_dict_json)
+
+
 
 
 if __name__ == '__main__':

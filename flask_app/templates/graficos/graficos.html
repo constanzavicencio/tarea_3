@@ -1,0 +1,136 @@
+{% extends '/base.html' %}
+
+{% block css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/graficos.css')}}">
+{% endblock %}
+
+{% block content %}  
+    <div class="main-container">
+        <div>
+            <h2>Gráficos artesanos e hinchas</h2>
+            <p>A continuación, se muestra la cantidad de artesanos por tipo de artesanía.</p>
+        </div>
+        <div class="chart-container">
+            <canvas id="grafico-artesanos" width="400" height="200"></canvas>
+        </div>
+        <div>
+            <p>A continuación, se muestra la cantidad de hinchas por deporte.</p>
+        </div>
+        <div class="chart-container">
+            <canvas id="grafico-hinchas" width="400" height="200"></canvas>
+        </div>
+        <div>
+            <p>Nota: Aquellas secciones que no posean usuarios no se muestran por simplicidad.</p>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block javascript %}
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Gráfico Hinchas
+
+        var deportes_dict = {{ deportes_dict|safe }};
+        var deportes_filtered = Object.fromEntries(
+            Object.entries(deportes_dict).filter(([key, value]) => value > 0)
+        );
+        var deportes_labels = Object.keys(deportes_filtered);
+        var deportes_data = Object.values(deportes_filtered);
+
+        var ctx = document.getElementById('grafico-hinchas').getContext('2d');
+        var myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: deportes_labels,
+                datasets: [{
+                    label: 'Cantidad',
+                    data: deportes_data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)', // Color de fondo de las barras
+                    borderColor: 'rgba(75, 192, 192, 1)', // Color del borde de las barras
+                    borderWidth: 1
+                }]
+            },
+            options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'white' // Color del texto de la leyenda
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: 'white' // Color de los números en el eje x
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: 'white' // Color de los números en el eje y
+                    }
+                }
+            }
+        }
+    });
+
+    // Gráfico Artesanos
+
+    var artesanias_dict = {{ artesanias_dict|safe }};
+    var artesanias_filtered = Object.fromEntries(
+        Object.entries(artesanias_dict).filter(([key, value]) => value > 0)
+    );
+    var artesanias_labels = Object.keys(artesanias_filtered);
+    var artesanias_data = Object.values(artesanias_filtered);
+
+    var ctx = document.getElementById('grafico-artesanos').getContext('2d');
+    var myBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: artesanias_labels,
+            datasets: [{
+                label: 'Cantidad',
+                data: artesanias_data,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)', // Color de fondo de las barras
+                borderColor: 'rgba(75, 192, 192, 1)', // Color del borde de las barras
+                borderWidth: 1
+            }]
+        },
+        options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        plugins: {
+            legend: {
+                labels: {
+                    color: 'white' // Color del texto de la leyenda
+                }
+            }
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: 'white' // Color de los números en el eje x
+                }
+            },
+            y: {
+                ticks: {
+                    color: 'white' // Color de los números en el eje y
+                }
+            }
+        }
+    }
+    });
+</script>
+    
+    
+{% endblock %}

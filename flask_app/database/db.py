@@ -44,40 +44,7 @@ def insertar_foto(ruta_archivo, nombre_archivo, artesano_id):
   cursor = conn.cursor()
   cursor.execute(QUERY_DICT["insertar_foto"], (ruta_archivo, nombre_archivo, artesano_id))
   conn.commit()
-
-# Inserciones hincha
   
-#def insertar_hincha(comuna, transporte, nombre, email, numero, comentarios):
-#	conn = get_conn()	
-#	cursor = conn.cursor()
-#	cursor.execute(QUERY_DICT["get_comuna_id"], (comuna,))
-#	comuna_id = cursor.fetchall()
-#
-#	conn = get_conn()
-#	cursor = conn.cursor()
-#	cursor.execute(QUERY_DICT["create_hincha"], (comuna_id, transporte, nombre, email, numero, comentarios))
-#	conn.commit()
-#	return True, None
-#
-#def insertar_hincha_deporte(nombre, nombre_deporte):
-#	conn = get_conn()	
-#	cursor = conn.cursor()
-#	cursor.execute(QUERY_DICT["get_deporte"], (nombre_deporte,))
-#	deporte_data = cursor.fetchall()
-#
-#	conn = get_conn()	
-#	cursor = conn.cursor()
-#	cursor.execute(QUERY_DICT["get_hinchas"], (nombre,))
-#	hincha_data = cursor.fetchall()
-#     
-#	conn = get_conn()
-#	cursor = conn.cursor()
-#	cursor.execute(QUERY_DICT["create_deportes_hincha"], (hincha_data, deporte_data))
-#	conn.commit()
-#	return True, None
-  
-  # HINCHA #
-
 def create_hinchas(comuna, transporte, nombre, email, phone, comentario):
 	conn = get_conn()
 	cursor = conn.cursor()
@@ -98,9 +65,7 @@ def get_deportes(deporte_nombre):
 	return depte
 
 def insertar_hincha(comuna, transporte, nombre, email, phone, comentario):
-	# 1. get comuna_id
 	comuna_id = get_comuna_id(comuna)
-	# 2. create user
 	create_hinchas(comuna_id, transporte, nombre, email, phone, comentario)
 	return True, None
 
@@ -147,26 +112,36 @@ def get_hinchas(nombre):
 	return hinchas
 
 def insertar_hincha_deporte(hincha, deporte_nombre):
-	# Se obtienen los indices del deporte
 	deporte_data = get_deportes(deporte_nombre)
-
-	# Se obtiene el id de hincha
 	hincha_data = get_hinchas(hincha)
-
-	# Se guarda la informacion en la base de datos
 	create_deportes_hincha(hincha_data, deporte_data)
 	return True, None
 
 
 # Listados
 
-# Obtener listado de artesanos ordenados de más reciente a más antiguo
 def obtener_artesanos():
   conn = get_conn()
   cursor = conn.cursor()
   cursor.execute(QUERY_DICT["listado_artesanos"])
   artesanos = cursor.fetchall()
   return artesanos
+
+def obtener_hinchas():
+  conn = get_conn()
+  cursor = conn.cursor()
+  cursor.execute(QUERY_DICT["listado_hinchas"])
+  hinchas = cursor.fetchall()
+  return hinchas
+
+
+def obtener_deportes():
+  conn = get_conn()
+  cursor = conn.cursor()
+  cursor.execute(QUERY_DICT["get_deportes_names"])
+  deportes = cursor.fetchall()
+  return deportes
+
 
 def obtener_primeros_5_artesanos():
   conn = get_conn()
@@ -288,4 +263,26 @@ def get_fotos_artesano(artesano_id):
 	fotos = cursor.fetchall()
 	return fotos
 
+## nuevos 
 
+def obtener_artesanias():
+  conn = get_conn()
+  cursor = conn.cursor()
+  cursor.execute(QUERY_DICT["get_artesanias_names"])
+  artesanias = cursor.fetchall()
+  return artesanias
+
+def get_artesanias_artesano(artesano_id):
+	conn = get_conn()	
+	cursor = conn.cursor()
+	cursor.execute(QUERY_DICT["get_artesanias_artesano"], (artesano_id,))
+	art_artesano = cursor.fetchall()
+	return art_artesano
+
+
+def get_artesanias_byindex(artesania_id):
+	conn = get_conn()	
+	cursor = conn.cursor()
+	cursor.execute(QUERY_DICT["get_artesanias_byindex"], (artesania_id,))
+	art = cursor.fetchall()
+	return art
